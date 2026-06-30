@@ -41,15 +41,6 @@ class CosemParser:
 
                 objects.append(obj)
 
-                self.logger.info(
-                    "ENUM object: class=%s logical=%s full=%s attr=%s value=%s",
-                    obj.class_id,
-                    obj.logical_name,
-                    obj.full_obis,
-                    obj.attribute,
-                    obj.value,
-                )
-
                 i += 13
                 continue
 

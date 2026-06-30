@@ -26,7 +26,8 @@ def test_decode_last_frame():
     decoder = ObisDecoder(logger)
 
     objects = parser.extract_capture_objects_heuristic(frame)
-
+    assert len(objects) == 21
+    
     state = decoder.decode(
         objects=objects,
         serial=None,
