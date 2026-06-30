@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: egd-dlms
+Version: 0.1.0
+Summary: EGD DLMS/COSEM bridge for Home Assistant via MQTT
+Requires-Python: >=3.12
+Requires-Dist: paho-mqtt>=2.1
+Requires-Dist: PyYAML>=6.0
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: mypy; extra == "dev"

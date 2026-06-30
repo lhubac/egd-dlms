@@ -1,0 +1,33 @@
+meter:
+  host: 192.168.10.4
+  port: 10001
+  frame_gap: 0.8
+  reconnect_delay: 5
+
+mqtt:
+  host: 127.0.0.1
+  port: 1883
+  username: homeassistant
+  password: kuliko
+  qos: 1
+  retain: false
+
+topics:
+  state: home/egd_meter/state
+  availability: home/egd_meter/availability
+  discovery_prefix: homeassistant
+
+device:
+  identifier: egd_sagemcom_xt211
+  manufacturer: Sagemcom
+  model: XT211
+  name: EGD elektroměr
+
+logging:
+  level: INFO
+
+recorder:
+  enabled: true
+  directory: samples
+  save_last: true
+  save_history: true

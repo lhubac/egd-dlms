@@ -1,0 +1,237 @@
+1.7.0:
+  key: power_import_w
+  name: EGD aktuální odběr
+  unit: W
+  scale: 1
+  device_class: power
+  state_class: measurement
+
+2.7.0:
+  key: power_export_w
+  name: EGD aktuální dodávka
+  unit: W
+  scale: 1
+  device_class: power
+  state_class: measurement
+
+21.7.0:
+  key: power_l1_w
+  name: EGD výkon L1
+  unit: W
+  scale: 1
+  device_class: power
+  state_class: measurement
+
+41.7.0:
+  key: power_l2_w
+  name: EGD výkon L2
+  unit: W
+  scale: 1
+  device_class: power
+  state_class: measurement
+
+61.7.0:
+  key: power_l3_w
+  name: EGD výkon L3
+  unit: W
+  scale: 1
+  device_class: power
+  state_class: measurement
+
+1.8.0:
+  key: energy_import_kwh
+  name: EGD energie odběr celkem
+  unit: kWh
+  scale: 0.001
+  device_class: energy
+  state_class: total_increasing
+
+1.8.1:
+  key: energy_import_t1_kwh
+  name: EGD energie odběr T1
+  unit: kWh
+  scale: 0.001
+  device_class: energy
+  state_class: total_increasing
+
+1.8.2:
+  key: energy_import_t2_kwh
+  name: EGD energie odběr T2
+  unit: kWh
+  scale: 0.001
+  device_class: energy
+  state_class: total_increasing
+
+1.8.3:
+  key: energy_import_t3_kwh
+  name: EGD energie odběr T3
+  unit: kWh
+  scale: 0.001
+  device_class: energy
+  state_class: total_increasing
+
+1.8.4:
+  key: energy_import_t4_kwh
+  name: EGD energie odběr T4
+  unit: kWh
+  scale: 0.001
+  device_class: energy
+  state_class: total_increasing
+
+2.8.0:
+  key: energy_export_kwh
+  name: EGD energie dodávka celkem
+  unit: kWh
+  scale: 0.001
+  device_class: energy
+  state_class: total_increasing
+
+22.7.0:
+  key: power_export_l1_w
+  name: EGD dodávka L1
+  unit: W
+  scale: 1
+  device_class: power
+  state_class: measurement
+
+42.7.0:
+  key: power_export_l2_w
+  name: EGD dodávka L2
+  unit: W
+  scale: 1
+  device_class: power
+  state_class: measurement
+
+62.7.0:
+  key: power_export_l3_w
+  name: EGD dodávka L3
+  unit: W
+  scale: 1
+  device_class: power
+  state_class: measurement
+
+17.0.0:
+  key: power_limiter_w
+  name: EGD hodnota omezovače
+  unit: W
+  scale: 1
+  device_class: power
+  state_class: measurement
+
+96.3.10:
+  key: disconnect_status
+  name: EGD odpojovač stav
+  unit:
+  scale: 1
+  device_class:
+  state_class:
+
+17.0.0:
+  key: power_limiter_w
+  name: EGD hodnota omezovače
+  unit: W
+  scale: 1
+  device_class: power
+  state_class: measurement
+
+96.14.0:
+  key: tariff_code
+  name: EGD aktuální tarif kód
+  unit:
+  scale: 1
+  device_class:
+  state_class:
+
+96.13.0:
+  key: consumer_message
+  name: EGD zpráva zákazníkovi
+  unit:
+  scale: 1
+  device_class:
+  state_class:
+
+0-0:96.3.10.255:
+  key: disconnect_status
+  name: EGD odpojovač stav
+  unit:
+  scale: 1
+  device_class:
+  state_class:
+  enum_map:
+    0: odpojeno
+    1: připojeno
+
+0-0:17.0.0.255:
+  key: power_limiter_w
+  name: EGD hodnota omezovače
+  unit: W
+  scale: 1
+  device_class: power
+  state_class: measurement
+
+0-1:96.3.10.255:
+  key: relay_1_status
+  name: EGD relé 1 stav
+  unit:
+  scale: 1
+  device_class:
+  state_class:
+  enum_map:
+    0: vypnuto
+    1: zapnuto
+
+0-2:96.3.10.255:
+  key: relay_2_status
+  name: EGD relé 2 stav
+  unit:
+  scale: 1
+  device_class:
+  state_class:
+  enum_map:
+    0: vypnuto
+    1: zapnuto
+
+0-3:96.3.10.255:
+  key: relay_3_status
+  name: EGD relé 3 stav
+  unit:
+  scale: 1
+  device_class:
+  state_class:
+  enum_map:
+    0: vypnuto
+    1: zapnuto
+
+0-4:96.3.10.255:
+  key: relay_4_status
+  name: EGD relé 4 stav
+  unit:
+  scale: 1
+  device_class:
+  state_class:
+  enum_map:
+    0: vypnuto
+    1: zapnuto
+
+0-5:96.3.10.255:
+  key: relay_5_status
+  name: EGD relé 5 stav
+  unit:
+  scale: 1
+  device_class:
+  state_class:
+  enum_map:
+    0: vypnuto
+    1: zapnuto
+
+0-6:96.3.10.255:
+  key: relay_6_status
+  name: EGD relé 6 stav
+  unit:
+  scale: 1
+  device_class:
+  state_class:
+  enum_map:
+    0: vypnuto
+    1: zapnuto
+

@@ -1,0 +1,205 @@
+import socket
+import json
+import time
+import os
+from datetime import datetime, timezone
+
+import paho.mqtt.client as mqtt
+
+
+METER_HOST = os.getenv("METER_HOST", "192.168.10.4")
+METER_PORT = int(os.getenv("METER_PORT", "10001"))
+
+MQTT_HOST = os.getenv("MQTT_HOST", "127.0.0.1")
+MQTT_PORT = int(os.getenv("MQTT_PORT", "1883"))
+
+MQTT_STATE_TOPIC = os.getenv("MQTT_STATE_TOPIC", "home/egd_meter/state")
+MQTT_AVAIL_TOPIC = os.getenv("MQTT_AVAIL_TOPIC", "home/egd_meter/availability")
+MQTT_DISCOVERY_PREFIX = os.getenv("MQTT_DISCOVERY_PREFIX", "homeassistant")
+
+RECONNECT_DELAY = int(os.getenv("RECONNECT_DELAY", "5"))
+FRAME_GAP_SECONDS = float(os.getenv("FRAME_GAP_SECONDS", "0.8"))
+
+
+SENSORS = {
+    "power_import_w": ("EGD aktuální odběr", "W", "power", "measurement"),
+    "power_export_w": ("EGD aktuální dodávka", "W", "power", "measurement"),
+    "power_l1_w": ("EGD výkon L1", "W", "power", "measurement"),
+    "power_l2_w": ("EGD výkon L2", "W", "power", "measurement"),
+    "power_l3_w": ("EGD výkon L3", "W", "power", "measurement"),
+
+    "energy_import_kwh": ("EGD energie odběr celkem", "kWh", "energy", "total_increasing"),
+    "energy_export_kwh": ("EGD energie dodávka celkem", "kWh", "energy", "total_increasing"),
+    "energy_import_t1_kwh": ("EGD energie odběr T1", "kWh", "energy", "total_increasing"),
+    "energy_import_t2_kwh": ("EGD energie odběr T2", "kWh", "energy", "total_increasing"),
+    "energy_import_t3_kwh": ("EGD energie odběr T3", "kWh", "energy", "total_increasing"),
+    "energy_import_t4_kwh": ("EGD energie odběr T4", "kWh", "energy", "total_increasing"),
+
+    "tariff": ("EGD aktuální tarif", None, None, None),
+    "meter_serial": ("EGD výrobní číslo", None, None, None),
+}
+
+
+OBIS_MAP = {
+    "1.7.0": ("power_import_w", 1),
+    "2.7.0": ("power_export_w", 1),
+    "21.7.0": ("power_l1_w", 1),
+    "41.7.0": ("power_l2_w", 1),
+    "61.7.0": ("power_l3_w", 1),
+
+    "1.8.0": ("energy_import_kwh", 0.001),
+    "1.8.1": ("energy_import_t1_kwh", 0.001),
+    "1.8.2": ("energy_import_t2_kwh", 0.001),
+    "1.8.3": ("energy_import_t3_kwh", 0.001),
+    "1.8.4": ("energy_import_t4_kwh", 0.001),
+    "2.8.0": ("energy_export_kwh", 0.001),
+}
+
+
+def now_iso():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def obis_to_string(raw):
+    a, b, c, d, e, f = raw
+    return f"{c}.{d}.{e}"
+
+
+def mqtt_connect():
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+    client.will_set(MQTT_AVAIL_TOPIC, "offline", retain=True)
+    client.connect(MQTT_HOST, MQTT_PORT, 60)
+    client.loop_start()
+    client.publish(MQTT_AVAIL_TOPIC, "online", retain=True)
+    publish_discovery(client)
+    return client
+
+
+def publish_discovery(client):
+    device = {
+        "identifiers": ["egd_sagemcom_xt211"],
+        "name": "EGD elektroměr",
+        "manufacturer": "Sagemcom",
+        "model": "XT211",
+    }
+
+    for key, (name, unit, device_class, state_class) in SENSORS.items():
+        topic = f"{MQTT_DISCOVERY_PREFIX}/sensor/egd_meter/{key}/config"
+
+        payload = {
+            "name": name,
+            "unique_id": f"egd_meter_{key}",
+            "state_topic": MQTT_STATE_TOPIC,
+            "availability_topic": MQTT_AVAIL_TOPIC,
+            "value_template": "{{ value_json." + key + " }}",
+            "device": device,
+        }
+
+        if unit:
+            payload["unit_of_measurement"] = unit
+        if device_class:
+            payload["device_class"] = device_class
+        if state_class:
+            payload["state_class"] = state_class
+
+        client.publish(topic, json.dumps(payload), qos=0, retain=True)
+
+    print("MQTT Discovery odesláno", flush=True)
+
+
+def parse_dlms_payload(data):
+    result = {}
+
+    # sériové číslo SAG...
+    idx = data.find(b"SAG")
+    if idx != -1:
+        serial = data[idx:idx + 16].decode("ascii", errors="ignore")
+        result["meter_serial"] = serial
+
+    # tarif: hledáme ASCII T1/T2/T3/T4
+    for tariff in [b"T1", b"T2", b"T3", b"T4"]:
+        if tariff in data:
+            result["tariff"] = tariff.decode("ascii")
+
+    i = 0
+    while i < len(data) - 16:
+        if (
+            data[i] == 0x02
+            and data[i + 1] == 0x02
+            and data[i + 2] == 0x00
+            and data[i + 3] == 0x03
+            and data[i + 10] == 0x02
+            and data[i + 11] == 0x06
+        ):
+            obis = obis_to_string(data[i + 4:i + 10])
+            value_raw = int.from_bytes(data[i + 12:i + 16], "big", signed=False)
+
+            if obis in OBIS_MAP:
+                key, scale = OBIS_MAP[obis]
+                result[key] = round(value_raw * scale, 3)
+
+            i += 16
+        else:
+            i += 1
+
+    return result
+
+
+def publish_state(client, data):
+    parsed = parse_dlms_payload(data)
+
+    payload = {
+        "timestamp": now_iso(),
+        **parsed,
+    }
+
+    print("STATE:", json.dumps(payload, ensure_ascii=False), flush=True)
+    client.publish(MQTT_STATE_TOPIC, json.dumps(payload), qos=0, retain=False)
+
+
+def run_client(mqtt_client):
+    print(f"Připojuji se k převodníku {METER_HOST}:{METER_PORT}", flush=True)
+
+    with socket.create_connection((METER_HOST, METER_PORT), timeout=15) as sock:
+        print("Připojeno k převodníku", flush=True)
+        sock.settimeout(0.2)
+
+        buffer = b""
+        last_data_time = None
+
+        while True:
+            try:
+                data = sock.recv(4096)
+
+                if not data:
+                    raise ConnectionError("Převodník ukončil spojení")
+
+                buffer += data
+                last_data_time = time.time()
+
+            except socket.timeout:
+                if buffer and last_data_time:
+                    if time.time() - last_data_time >= FRAME_GAP_SECONDS:
+                        publish_state(mqtt_client, buffer)
+                        buffer = b""
+                        last_data_time = None
+
+
+def main():
+    print("EGD MQTT Discovery parser startuje", flush=True)
+    print(f"Převodník: {METER_HOST}:{METER_PORT}", flush=True)
+
+    mqtt_client = mqtt_connect()
+
+    while True:
+        try:
+            run_client(mqtt_client)
+        except Exception as e:
+            print(f"Spojení selhalo: {e}", flush=True)
+            print(f"Nový pokus za {RECONNECT_DELAY} s", flush=True)
+            time.sleep(RECONNECT_DELAY)
+
+
+if __name__ == "__main__":
+    main()
+

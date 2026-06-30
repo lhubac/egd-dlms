@@ -1,0 +1,29 @@
+[project]
+name = "egd-dlms"
+version = "0.1.0"
+description = "EGD DLMS/COSEM bridge for Home Assistant via MQTT"
+requires-python = ">=3.12"
+dependencies = [
+    "paho-mqtt>=2.1",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+    "mypy",
+]
+
+[project.scripts]
+egd-dlms = "egd_dlms.main:main"
+egd-dlms-replay = "egd_dlms.replay:main"
+egd-dlms-decode = "egd_dlms.decode:main"
+egd-dlms-dump = "egd_dlms.dump:main"
+
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
