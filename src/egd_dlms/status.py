@@ -43,6 +43,7 @@ def format_age(timestamp: datetime | None) -> str:
 
 def main():
     recorder_cfg = CONFIG.get("recorder", {})
+    watchdog_cfg = CONFIG.get("watchdog", {})
     samples_dir = PROJECT_DIR / recorder_cfg.get("directory", "samples")
 
     last_state_path = samples_dir / "last_state.json"
@@ -71,6 +72,10 @@ def main():
     print(f"Frame size ......... {frame_size}")
     print(f"Message count ...... {state.get('message_count', 'unknown')}")
     print(f"Reconnect count .... {state.get('reconnect_count', 'unknown')}")
+    print()
+    print(f"Watchdog ........... {'enabled' if watchdog_cfg.get('enabled') else 'disabled'}")
+    print(f"Watchdog warning ... {watchdog_cfg.get('warning_after_seconds', 'unknown')} s")
+    print(f"Watchdog reconnect . {watchdog_cfg.get('reconnect_after_seconds', 'unknown')} s")
     print()
     print(f"Meter serial ....... {state.get('meter_serial', 'unknown')}")
     print(f"Tariff ............. {state.get('tariff', 'unknown')}")

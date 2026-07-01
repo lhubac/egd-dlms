@@ -31,3 +31,8 @@ recorder:
   directory: samples
   save_last: true
   save_history: true
+
+watchdog:
+  enabled: true
+  warning_after_seconds: 180
+  reconnect_after_seconds: 600

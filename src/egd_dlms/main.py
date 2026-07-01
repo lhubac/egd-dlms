@@ -8,7 +8,8 @@ from egd_dlms.meter import MeterTcpClient
 from egd_dlms.mqtt import MqttPublisher
 from egd_dlms.parser import CosemParser
 from egd_dlms.recorder import FrameRecorder
-
+#from egd_dlms.watchdog import Watchdog
+from egd_dlms.connection_monitor import ConnectionMonitor
 
 def main():
     logger = setup_logger()
@@ -18,6 +19,8 @@ def main():
 
     diagnostics = Diagnostics()
     recorder = FrameRecorder(logger)
+    monitor = ConnectionMonitor(logger)
+#    watchdog = Watchdog(logger)
 
     mqtt = MqttPublisher(logger)
     mqtt.connect()
@@ -30,6 +33,7 @@ def main():
             meter = MeterTcpClient(logger)
 
             for frame in meter.read_frames():
+                monitor.frame_received()
                 objects = parser.parse(frame)
                 serial = parser.extract_serial(frame)
                 tariff = parser.extract_tariff(frame)
