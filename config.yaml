@@ -27,7 +27,7 @@ logging:
   level: INFO
 
 recorder:
-  enabled: true
+  enabled: false
   directory: samples
   save_last: true
   save_history: true
