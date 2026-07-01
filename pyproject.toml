@@ -20,6 +20,7 @@ egd-dlms = "egd_dlms.main:main"
 egd-dlms-replay = "egd_dlms.replay:main"
 egd-dlms-decode = "egd_dlms.decode:main"
 egd-dlms-dump = "egd_dlms.dump:main"
+egd-dlms-status = "egd_dlms.status:main"
 
 [build-system]
 requires = ["setuptools>=70"]
