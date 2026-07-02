@@ -8,8 +8,8 @@ from egd_dlms.meter import MeterTcpClient
 from egd_dlms.mqtt import MqttPublisher
 from egd_dlms.parser import CosemParser
 from egd_dlms.recorder import FrameRecorder
-#from egd_dlms.watchdog import Watchdog
 from egd_dlms.connection_monitor import ConnectionMonitor
+from egd_dlms.runtime_state import RuntimeState
 
 def main():
     logger = setup_logger()
@@ -19,10 +19,10 @@ def main():
 
     diagnostics = Diagnostics()
     recorder = FrameRecorder(logger)
+    runtime_state = RuntimeState(logger)
     monitor = ConnectionMonitor(logger)
-#    watchdog = Watchdog(logger)
 
-    mqtt = MqttPublisher(logger)
+    mqtt = MqttPublisher(logger, on_reconnect=runtime_state.mqtt_reconnect)
     mqtt.connect()
 
     parser = CosemParser(logger)
@@ -30,7 +30,8 @@ def main():
 
     while True:
         try:
-            meter = MeterTcpClient(logger)
+            monitor.connection_started()
+            meter = MeterTcpClient(logger, on_idle=monitor.check)
 
             for frame in meter.read_frames():
                 monitor.frame_received()
@@ -47,11 +48,13 @@ def main():
                 diag = diagnostics.frame_received(len(frame))
                 payload = mqtt.build_payload(state, diag)
 
+                runtime_state.frame_received(payload)
                 recorder.save(frame, payload)
                 mqtt.publish_state(payload)
 
         except Exception as e:
             diagnostics.reconnect()
+            runtime_state.tcp_reconnect()
             logger.error("Spojení s převodníkem selhalo: %s", e)
             logger.info("Nový pokus za %s s", reconnect_delay)
             time.sleep(reconnect_delay)

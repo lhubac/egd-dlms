@@ -29,10 +29,14 @@ logging:
 recorder:
   enabled: false
   directory: samples
-  save_last: true
-  save_history: true
+  save_last: false
+  save_history: false
 
 watchdog:
   enabled: true
   warning_after_seconds: 180
   reconnect_after_seconds: 600
+
+runtime:
+  directory: runtime
+  status_file: status.json

@@ -41,15 +41,40 @@ def format_age(timestamp: datetime | None) -> str:
     return f"{hours} h ago"
 
 
+def format_uptime(start: str | None) -> str:
+    if not start:
+        return "unknown"
+
+    try:
+        started = datetime.fromisoformat(start)
+    except Exception:
+        return "unknown"
+
+    delta = datetime.now(timezone.utc) - started
+
+    days = delta.days
+    hours = delta.seconds // 3600
+    minutes = (delta.seconds % 3600) // 60
+
+    if days:
+        return f"{days}d {hours}h {minutes}m"
+
+    return f"{hours}h {minutes}m"
+
 def main():
     recorder_cfg = CONFIG.get("recorder", {})
     watchdog_cfg = CONFIG.get("watchdog", {})
     samples_dir = PROJECT_DIR / recorder_cfg.get("directory", "samples")
 
-    last_state_path = samples_dir / "last_state.json"
+    runtime_cfg = CONFIG.get("runtime", {})
+    runtime_dir = PROJECT_DIR / runtime_cfg.get("directory", "runtime")
+    last_state_path = runtime_dir / runtime_cfg.get("status_file", "status.json")
     last_frame_path = samples_dir / "last_frame.hex"
 
-    state = load_json(last_state_path)
+    status = load_json(last_state_path)
+
+    runtime = status.get("runtime", {})
+    state = status.get("meter", status)
 
     timestamp = parse_timestamp(state.get("timestamp"))
     last_message = parse_timestamp(state.get("last_message"))
@@ -61,7 +86,12 @@ def main():
     print()
     print("EGD-DLMS Status")
     print("=" * 50)
+    print(f"Uptime ............. {format_uptime(runtime.get('started'))}")
+    print(f"Frames received .... {runtime.get('frames_received', 'unknown')}")
+    print(f"TCP reconnects ..... {runtime.get('tcp_reconnects', 'unknown')}")
+    print(f"MQTT reconnects .... {runtime.get('mqtt_reconnects', 'unknown')}")
     print(f"Project dir ........ {PROJECT_DIR}")
+    print(f"Runtime state file . {'yes' if last_state_path.exists() else 'no'}")
     print(f"Recorder ........... {'enabled' if recorder_cfg.get('enabled') else 'disabled'}")
     print(f"Samples dir ........ {samples_dir}")
     print(f"Last frame file .... {'yes' if last_frame_path.exists() else 'no'}")

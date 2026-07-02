@@ -6,8 +6,9 @@ from egd_dlms.config import METER
 
 
 class MeterTcpClient:
-    def __init__(self, logger):
+    def __init__(self, logger, on_idle=None):
         self.logger = logger
+        self.on_idle = on_idle
 
     def read_frames(self) -> Generator[bytes, None, None]:
         host = METER["host"]
@@ -34,6 +35,9 @@ class MeterTcpClient:
                     last_data_time = time.time()
 
                 except socket.timeout:
+                    if self.on_idle:
+                        self.on_idle()
+
                     if buffer and last_data_time:
                         if time.time() - last_data_time >= frame_gap:
                             frame = buffer

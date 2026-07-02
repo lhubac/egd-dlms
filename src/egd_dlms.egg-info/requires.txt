@@ -1,7 +1,0 @@
-paho-mqtt>=2.1
-PyYAML>=6.0
-
-[dev]
-pytest
-ruff
-mypy

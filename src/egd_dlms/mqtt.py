@@ -9,8 +9,11 @@ from egd_dlms.models import MeterState
 
 
 class MqttPublisher:
-    def __init__(self, logger):
+    def __init__(self, logger, on_reconnect=None):
         self.logger = logger
+        self.on_reconnect = on_reconnect
+        self._mqtt_connected_once = False
+
         self.state_topic = TOPICS.get("state", "home/egd_meter/state")
         self.availability_topic = TOPICS.get("availability", "home/egd_meter/availability")
 
@@ -55,14 +58,21 @@ class MqttPublisher:
             json.dumps(payload),
             qos=self.qos,
             retain=self.retain,
-        )    
- 
+        )
+
     def _on_connect(self, client, userdata, flags, reason_code, properties):
         if str(reason_code) != "Success":
             self.logger.error("MQTT připojení odmítnuto: %s", reason_code)
             return
 
         self.logger.info("MQTT připojeno")
+
+        if self._mqtt_connected_once:
+            if self.on_reconnect:
+                self.on_reconnect()
+        else:
+            self._mqtt_connected_once = True
+
         client.publish(self.availability_topic, "online", retain=True)
         publish_discovery(client, self.logger)
 

@@ -12,3 +12,4 @@ runtime/*.json
 !samples/.gitkeep
 
 *.tar.gz
+*.egg-info/

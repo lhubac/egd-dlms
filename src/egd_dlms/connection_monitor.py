@@ -19,6 +19,10 @@ class ConnectionMonitor:
         self.last_frame_time = time.time()
         self.warning_logged = False
 
+    def connection_started(self) -> None:
+        self.last_frame_time = time.time()
+        self.warning_logged = False
+
     def check(self) -> None:
         if not self.enabled:
             return
