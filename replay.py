@@ -19,7 +19,7 @@ def main():
     if len(sys.argv) > 1:
         frame_path = Path(sys.argv[1])
     else:
-        frame_path = Path("samples/last_frame.hex")
+        frame_path = Path("tests/data/sample_push_frame.hex")
 
     if not frame_path.exists():
         raise FileNotFoundError(f"Soubor neexistuje: {frame_path}")
