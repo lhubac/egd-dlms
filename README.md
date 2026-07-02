@@ -30,3 +30,4 @@ EGD-DLMS fills this gap by providing a lightweight passive bridge focused on:
 - automatic Home Assistant integration,
 - reproducible offline testing.
 
+![License](https://img.shields.io/badge/license-MIT-green.svg)
