@@ -36,11 +36,11 @@ jobs:
 
       - name: Run replay CLI
         run: |
-          egd-dlms-replay
+          egd-dlms-replay tests/data/sample_push_frame.hex
 
       - name: Run decode CLI
         run: |
-          egd-dlms-decode
+          egd-dlms-decode tests/data/sample_push_frame.hex
 
   docker-build:
     name: Docker build

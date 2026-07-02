@@ -1,0 +1,38 @@
+{
+  "runtime": {
+    "started": "2026-07-02T13:09:51.184809+00:00",
+    "frames_received": 269,
+    "tcp_reconnects": 0,
+    "mqtt_reconnects": 0
+  },
+  "meter": {
+    "timestamp": "2026-07-02T17:38:04.712117+00:00",
+    "last_message": "2026-07-02T17:38:04.712117+00:00",
+    "message_count": 269,
+    "reconnect_count": 0,
+    "last_frame_length": 442,
+    "meter_serial": "SAG1030300098167",
+    "tariff": "T2",
+    "disconnect_status": "připojeno",
+    "relay_1_status": "vypnuto",
+    "relay_2_status": "vypnuto",
+    "relay_3_status": "vypnuto",
+    "relay_4_status": "vypnuto",
+    "relay_5_status": "vypnuto",
+    "relay_6_status": "vypnuto",
+    "power_import_w": 140.0,
+    "power_l1_w": 87.0,
+    "power_l2_w": 50.0,
+    "power_l3_w": 3.0,
+    "power_export_w": 0.0,
+    "power_export_l1_w": 0.0,
+    "power_export_l2_w": 0.0,
+    "power_export_l3_w": 0.0,
+    "energy_import_kwh": 1710.902,
+    "energy_import_t1_kwh": 0.0,
+    "energy_import_t2_kwh": 357.456,
+    "energy_import_t3_kwh": 1353.445,
+    "energy_import_t4_kwh": 0.0,
+    "energy_export_kwh": 6.763
+  }
+}

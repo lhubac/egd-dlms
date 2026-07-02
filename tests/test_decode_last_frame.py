@@ -16,8 +16,8 @@ class DummyLogger:
 
 
 def test_decode_last_frame():
-    frame_path = Path("samples/last_frame.hex")
-    assert frame_path.exists(), "Chybí samples/last_frame.hex"
+    frame_path = Path("tests/data/sample_push_frame.hex")
+    assert frame_path.exists(), "Chybí tests/data/sample_push_frame.hex"
 
     frame = bytes.fromhex(frame_path.read_text(encoding="utf-8").strip())
 

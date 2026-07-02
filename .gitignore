@@ -5,6 +5,10 @@ __pycache__/
 
 samples/*.hex
 samples/*.json
+runtime/*.json
+
+!tests/data/*.hex
+!tests/data/*.json
 !samples/.gitkeep
 
 *.tar.gz
