@@ -1,0 +1,11 @@
+services:
+  egd-dlms:
+    container_name: egd-dlms
+    build: .
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - ./obis.yaml:/app/obis.yaml:ro
+      - ./runtime:/app/runtime
+      - ./samples:/app/samples
