@@ -8,7 +8,7 @@ def main():
 
     logger = setup_logger()
 
-    frame = Path("samples/last_frame.hex").read_text().strip()
+    frame = Path("tests/data/sample_push_frame.hex").read_text().strip()
 
     data = bytes.fromhex(frame)
 
