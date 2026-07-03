@@ -13,5 +13,3 @@ runtime/*.json
 
 *.tar.gz
 *.egg-info/
-*.egg-info/
-*.egg-info/
