@@ -9,6 +9,14 @@
 
 🇨🇿 Open-source propojení mezi **chytrým elektroměrem EG.D** a Home Assistantem.
 
+### Energy Dashboard
+
+![Energy Dashboard](screenshots/energy-dashboard.png)
+
+### Power sensor
+
+![Power sensor](screenshots/sensor-power-l2.png)
+
 Přijímá pasivní HAN zprávy ve formátu **DLMS/COSEM** z elektroměru a automaticky je zpřístupňuje v **Home Assistantu** pomocí **MQTT Discovery**.
 
 ## Hlavní vlastnosti
