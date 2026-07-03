@@ -7,11 +7,11 @@
 [![Docker](https://img.shields.io/badge/Docker-supported-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![Home%20Assistant](https://img.shields.io/badge/Home%20Assistant-MQTT%20Discovery-41BDF5?logo=homeassistant&logoColor=white)](https://www.home-assistant.io/)
 
-Open-source propojení mezi **chytrým elektroměrem EG.D** a Home Assistantem.
+🇨🇿 Open-source propojení mezi **chytrým elektroměrem EG.D** a Home Assistantem.
 
 Přijímá pasivní HAN zprávy ve formátu **DLMS/COSEM** z elektroměru a automaticky je zpřístupňuje v **Home Assistantu** pomocí **MQTT Discovery**.
 
-Open-source bridge for **EG.D** smart meters.
+🇬🇧 Open-source bridge for **EG.D** smart meters.
 
 Converts passive HAN **DLMS/COSEM** telegrams into **MQTT Discovery** entities for **Home Assistant**.
 
