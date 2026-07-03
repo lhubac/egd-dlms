@@ -7,15 +7,24 @@
 [![Docker](https://img.shields.io/badge/Docker-supported-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![Home%20Assistant](https://img.shields.io/badge/Home%20Assistant-MQTT%20Discovery-41BDF5?logo=homeassistant&logoColor=white)](https://www.home-assistant.io/)
 
-🇨🇿 Open-source propojení mezi **chytrým elektroměrem EG.D** a Home Assistantem.
+Připojte elektroměr EG.D k Home Assistantu během několika minut 
+- ✅ bez vlastních šablon, 
+- ✅ bez ruční konfigurace MQTT a 
+- ✅ s plnou podporou Energy Dashboardu.
 
-### Energy Dashboard
+### EGD-DLMS Architektura
+
+![EGD-DLMS Architecture](screenshots/architecture.png)
+
+### Panel Energie
 
 ![Energy Dashboard](screenshots/energy-dashboard.png)
 
-### Power sensor
+### Sensor
 
 ![Power sensor](screenshots/sensor-power-l2.png)
+>
+🇨🇿 Open-source propojení mezi **chytrým elektroměrem EG.D** a Home Assistantem.
 
 Přijímá pasivní HAN zprávy ve formátu **DLMS/COSEM** z elektroměru a automaticky je zpřístupňuje v **Home Assistantu** pomocí **MQTT Discovery**.
 
