@@ -1,33 +1,31 @@
-## Proč tento projekt vznikl?
+# EGD-DLMS
 
-Chytré elektroměry distribuované společností EG.D poskytují rozhraní HAN
-(Home Area Network), které pravidelně vysílá DLMS/COSEM Push zprávy.
+[![CI](https://github.com/lhubac/egd-dlms/actions/workflows/ci.yml/badge.svg)](https://github.com/lhubac/egd-dlms/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/lhubac/egd-dlms)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/lhubac/egd-dlms)](https://github.com/lhubac/egd-dlms/releases)
+[![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
+[![Docker](https://img.shields.io/badge/Docker-supported-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![Home%20Assistant](https://img.shields.io/badge/Home%20Assistant-MQTT%20Discovery-41BDF5?logo=homeassistant&logoColor=white)](https://www.home-assistant.io/)
 
-Přestože obsahují cenné informace o okamžité spotřebě, energiích,
-tarifu nebo stavech relé, neexistovalo jednoduché open-source řešení,
-které by tato data automaticky zpřístupnilo v Home Assistantu.
+🇨🇿 Open-source propojení mezi **chytrým elektroměrem EG.D** a Home Assistantem.
 
-Projekt EGD-DLMS vznikl s cílem nabídnout:
+Přijímá pasivní HAN zprávy ve formátu **DLMS/COSEM** z elektroměru a automaticky je zpřístupňuje v **Home Assistantu** pomocí **MQTT Discovery**.
 
-- spolehlivý pasivní příjem dat z elektroměru,
-- jednoduché nasazení pomocí Dockeru,
-- automatickou integraci do Home Assistantu,
-- možnost vývoje a testování bez připojeného elektroměru.
+## Hlavní vlastnosti
 
-## Why this project?
+- ✅ Podpora elektroměrů EG.D (pasivní HAN)
+- ✅ MQTT Discovery pro Home Assistant
+- ✅ Docker i nativní Python instalace
+- ✅ Automatické rozpoznání OBIS hodnot
+- ✅ Runtime diagnostika
+- ✅ GitHub Actions
 
-Smart meters distributed by EG.D provide a HAN (Home Area Network) interface
-that periodically transmits DLMS/COSEM Push messages.
+🇬🇧 Open-source bridge for **EG.D** smart meters.
 
-Although the transmitted data contain valuable information about power,
-energy, tariff and relay status, there is currently no simple open-source
-bridge that automatically integrates these values into Home Assistant.
+Converts passive HAN **DLMS/COSEM** telegrams into **MQTT Discovery** entities for **Home Assistant**.
 
-EGD-DLMS fills this gap by providing a lightweight passive bridge focused on:
+[![CI](https://github.com/lhubac/egd-dlms/actions/workflows/ci.yml/badge.svg)](https://github.com/lhubac/egd-dlms/actions/workflows/ci.yml)
 
-- reliability,
-- easy deployment using Docker,
-- automatic Home Assistant integration,
-- reproducible offline testing.
+[![GitHub stars](https://img.shields.io/github/stars/lhubac/egd-dlms?style=social)](https://github.com/lhubac/egd-dlms/stargazers)
 
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+[![GitHub issues](https://img.shields.io/github/issues/lhubac/egd-dlms)](https://github.com/lhubac/egd-dlms/issues)
