@@ -68,14 +68,13 @@ def publish_discovery(client, logger):
             "unique_id": f"egd_meter_{key}",
             "state_topic": state_topic,
             "availability_topic": availability_topic,
-            # value_json.get(...) místo value_json.<key> — payload nese jen
-            # pole, která se skutečně objevila v aktuálním DLMS rámci (viz
-            # project_egd_dlms_power_field_bug.md). Bez .get() by chybějící
-            # klíč způsobil chybu vykreslení šablony a HA by tiše podržela
-            # POSLEDNÍ (třeba už dávno neplatnou) hodnotu napořád. S .get()
-            # chybějící klíč vykreslí None -> entita korektně "nedostupná",
-            # dokud nepřijde nová platná hodnota.
-            "value_template": "{{ value_json.get('" + key + "') }}",
+            # Záměrně BEZ .get() — chybějící klíč (payload nese jen pole,
+            # která se objevila v aktuálním DLMS rámci) tak template
+            # vykreslení "selže" a HA podrží poslední ZNÁMOU hodnotu místo
+            # blikání na "unavailable" každý cyklus. Garbage hodnoty už řeší
+            # parser (viz _is_plausible v parser.py) — tahle šablona teď řeší
+            # jen zobrazení, ne validitu dat.
+            "value_template": "{{ value_json." + key + " }}",
             "device": device,
         }
 
@@ -89,4 +88,5 @@ def publish_discovery(client, logger):
         client.publish(topic, json.dumps(payload), qos=0, retain=True)
 
     logger.info("MQTT Discovery odesláno")
+
 
