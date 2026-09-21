@@ -3,6 +3,12 @@ meter:
   port: 10001
   frame_gap: 0.8
   reconnect_delay: 5
+  # Instalace bez fotovoltaiky/baterie nemůže reálně dodávat proud do sítě -
+  # nastav na true, aby se každé nenulové čtení "dodávka"/export pole (OBIS
+  # s `is_export: true` v obis.yaml) zahodilo jako podezření na poškozený
+  # rámec, místo aby "viselo" jako aktuální stav senzoru. Pokud instalace
+  # export skutečně má (FVE/baterie), nech na false (výchozí).
+  assume_no_export: false
 
 mqtt:
   host: 127.0.0.1
