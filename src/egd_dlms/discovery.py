@@ -68,6 +68,12 @@ def publish_discovery(client, logger):
             "unique_id": f"egd_meter_{key}",
             "state_topic": state_topic,
             "availability_topic": availability_topic,
+            # Záměrně BEZ .get() — chybějící klíč (payload nese jen pole,
+            # která se objevila v aktuálním DLMS rámci) tak template
+            # vykreslení "selže" a HA podrží poslední ZNÁMOU hodnotu místo
+            # blikání na "unavailable" každý cyklus. Garbage hodnoty už řeší
+            # parser (viz _is_plausible v parser.py) — tahle šablona teď řeší
+            # jen zobrazení, ne validitu dat.
             "value_template": "{{ value_json." + key + " }}",
             "device": device,
         }
@@ -82,3 +88,5 @@ def publish_discovery(client, logger):
         client.publish(topic, json.dumps(payload), qos=0, retain=True)
 
     logger.info("MQTT Discovery odesláno")
+
+
