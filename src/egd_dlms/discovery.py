@@ -68,7 +68,11 @@ def publish_discovery(client, logger):
             "unique_id": f"egd_meter_{key}",
             "state_topic": state_topic,
             "availability_topic": availability_topic,
-            "value_template": "{{ value_json." + key + " }}",
+            "value_template": (
+                "{{ value_json.get("
+                + json.dumps(key)
+                + ", this.state if this.state not in ['unknown', 'unavailable'] else none) }}"
+            ),
             "device": device,
         }
 
